@@ -48,11 +48,6 @@
     SELECT CPF AS CPF_CLIENTE, CIDADE AS CIDADE_CLIENTE FROM tbcliente;
 
 ----------------------------------------------
-#Selecionando com filtros
-
-    SELECT CPF FROM tbcliente WHERE CPF = '222222222';
-
-----------------------------------------------
 #Inserir uma nova linha no db
 
     INSERT INTO TABELA_DE_VENDEDORES 
