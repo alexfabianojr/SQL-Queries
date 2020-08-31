@@ -1,0 +1,402 @@
+#Tutorial de SQL do w3schools
+
+----------------------------------------------
+#Syntax básicas
+
+    SELECT - seleciona para extrair um dado da tabela
+    UPDATE - atualiza os dados em uma linha da tabela
+    DELETE - deleta uma linha de dados da tabela
+    INSERT INTO - insere uma nova linha de dados na tabela
+    CREATE DATABASE - cria um novo database
+    ALTER DATABASE - modifica o database
+    CREATE TABLE - cria uma nova tabela
+    ALTER TABLE - modifica uma tabela
+    DROP TABLE - deleta uma tabela
+    CREATE INDEX - cria um index (search key)
+    DROP INDEX - deleta um index
+
+----------------------------------------------
+
+	SELECT column1, column2, ...
+	FROM table_name; 
+
+----------------------------------------------
+
+	SELECT * FROM table_name; 
+
+----------------------------------------------
+#Selecionando apenas valores distintos, descartando as repetições
+
+	SELECT DISTINCT column1, column2, ...
+	FROM table_name; 
+
+----------------------------------------------
+#Selecionando dados que passem numa determinada condição
+
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE condition; 
+
+----------------------------------------------
+#Agrupando condições
+
+#And - vínculo obrigatório &&
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE condition1 AND condition2 AND condition3 ...;
+
+#Or - vínculo alternativo || ou else if()
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE condition1 OR condition2 OR condition3 ...; 
+
+#Not - exclusão de vínculo !
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE NOT condition; 
+
+----------------------------------------------
+#Ordenar os elementos de forma ascendente (default) ou descendente
+
+	SELECT column1, column2, ...
+	FROM table_name
+	ORDER BY column1, column2, ... ASC|DESC; 
+
+#Primeiro ordena os elementos pelo country, caso tenha 2 ou N
+#do mesmo país ele irá "desempatar" ao ordenar pelo nome
+#poderíamos por mais condições de ordem em caso de países e nomes iguais 
+	SELECT * FROM Customers
+	ORDER BY Country, CustomerName; 
+
+----------------------------------------------
+#Inserindo novos dados na tabela (linha nova)
+
+	INSERT INTO table_name (column1, column2, column3, ...)
+	VALUES (value1, value2, value3, ...); 
+
+----------------------------------------------
+#Testando se um valor é nullo numa célula
+
+	SELECT column_names
+	FROM table_name
+	WHERE column_name IS NULL; 
+
+	SELECT column_names
+	FROM table_name
+	WHERE column_name IS NOT NULL; 
+
+----------------------------------------------
+#Atualizando dados
+
+	UPDATE table_name
+	SET column1 = value1, column2 = value2, ...
+	WHERE condition; 
+
+----------------------------------------------
+#Deletando uma linha de dados na tabela por condição
+
+	DELETE FROM table_name WHERE condition; 
+
+----------------------------------------------
+#Selecionando apenas um numero definido de dados
+
+#SQL
+	SELECT TOP number|percent column_name(s)
+	FROM table_name
+	WHERE condition; 
+
+#MySQL
+	SELECT column_name(s)
+	FROM table_name
+	WHERE condition
+	LIMIT number; 
+
+#Oracle
+	SELECT column_name(s)
+	FROM table_name
+	WHERE ROWNUM <= number;
+
+----------------------------------------------
+#Selecionando o menor ou maior valor de uma coluna
+
+	SELECT MIN(column_name)
+	FROM table_name
+	WHERE condition; 
+
+	SELECT MAX(column_name)
+	FROM table_name
+	WHERE condition; 
+
+----------------------------------------------
+#Retornando o numero de linhas que passam em determinado filtro
+
+	SELECT COUNT(column_name)
+	FROM table_name
+	WHERE condition; 
+
+----------------------------------------------
+#Retornando a média de valores de uma coluna numérica
+
+	SELECT AVG(column_name)
+	FROM table_name
+	WHERE condition; 
+
+----------------------------------------------
+#Retornando a soma total de elementos numa coluna numerica
+
+	SELECT SUM(column_name)
+	FROM table_name
+	WHERE condition;
+
+----------------------------------------------
+#Procurando por algum padrão numa coluna
+
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE columnN LIKE pattern;
+
+#Coringas (wildcards): podemos utilizar o % ou _
+# % - representa qualquer coisa
+#exemplo %aeo% representa qualquer coisa antes e depois de aeo
+# _ - representa qualquer coisa naquele caracter
+#exemplo a_ex pode ser alex, arex, atex, abex, afex, etc
+----------------------------------------------
+#Wildcards do SQL
+	
+	* : representa zero ou mais caracteres
+	? : representa um único caracter
+	[] : representa qualquer caracter dentro dos brackets
+	! : representa qualquer caracter fora dos brackets
+	- : representa um conjunto de caracteres, ex [a-d]
+	# : representa qualquer caracter numérico
+	% : representa zero ou mais caracteres
+	^ : representa qualquer caracter fora dos brackets
+	_ : representa um único caracter
+
+----------------------------------------------
+#Abreviação para comandos OR
+
+	SELECT column_name(s)
+	FROM table_name
+	WHERE column_name IN (value1, value2, ...); 
+
+----------------------------------------------
+#Selecionando o retorno entre dois intervalos definidos
+
+
+	SELECT column_name(s)
+	FROM table_name
+	WHERE column_name BETWEEN value1 AND value2; 
+
+----------------------------------------------
+#Dando apelidos (alias) para as colunas ou tabelas
+
+#Coluna
+	SELECT column_name AS alias_name
+	FROM table_name;
+
+#Tabela
+	SELECT column_name(s)
+	FROM table_name AS alias_name;
+
+----------------------------------------------
+#Juntando colunas de tabelas diferentes (join)
+
+#Inner Join : retorna os dados de valores que se correspondem (match + filter) nas duas tabelas
+	SELECT column_name(s)
+	FROM table1
+	INNER JOIN table2
+	ON table1.column_name = table2.column_name;
+
+#Left Join : retorna todos os valores da tabela da esquerda e, 
+#apenas, os valores que corresponderem (matching + filter) da tabela da direta
+	SELECT column_name(s)
+	FROM table1
+	LEFT JOIN table2
+	ON table1.column_name = table2.column_name;
+
+#Right Join : retorna todos os valores da tabela da direita e,
+#apenas, os valores que corresponderem (matching +filter) da tabela da esquerda
+	SELECT column_name(s)
+	FROM table1
+	RIGHT JOIN table2
+	ON table1.column_name = table2.column_name;
+
+#Full Join : retorna todos os valores (right e left) caso haja correspondencia (match + filter)
+	SELECT column_name(s)
+	FROM table1
+	FULL OUTER JOIN table2
+	ON table1.column_name = table2.column_name
+	WHERE condition; 
+
+#Self Join, no exemplo T1 e T2 são alias para a mesma tabela
+	SELECT column_name(s)
+	FROM table1 T1, table1 T2
+	WHERE condition;
+
+----------------------------------------------
+#Combinando o resultado de dois ou mais selects
+#Regras: 
+#i. Cada select com union deve ter o mesmo número de colunas
+#ii. As colunas devem ter o mesmo tipo de data type
+#iii. As colunas em cada select devem estar na mesma ordem
+
+	SELECT column_name(s) FROM table1
+	UNION
+	SELECT column_name(s) FROM table2; 
+
+	SELECT column_name(s) FROM table1
+	UNION ALL
+	SELECT column_name(s) FROM table2; 
+
+----------------------------------------------
+#Agrupando colunas que possuem o mesmo valor
+
+	SELECT column_name(s)
+	FROM table_name
+	WHERE condition
+	GROUP BY column_name(s)
+	ORDER BY column_name(s); 
+
+----------------------------------------------
+#Buscando por condição, semelhante ao where
+#mas com suporte a funções de operações, 
+#pode ser usado com ou sem where
+
+	SELECT column_name(s)
+	FROM table_name
+	WHERE condition
+	GROUP BY column_name(s)
+	HAVING condition           #pode ser uma condição tipo saldo > x
+	ORDER BY column_name(s);
+
+----------------------------------------------
+#Padrão booleano sobre a existência de algo em uma subquery
+
+	SELECT column_name(s)
+	FROM table_name
+	WHERE EXISTS
+	(SELECT column_name FROM table_name WHERE condition); 
+
+exemplo
+
+	SELECT SupplierName
+	FROM Suppliers
+	WHERE EXISTS 
+	(SELECT ProductName FROM Products WHERE Products.SupplierID = Suppliers.supplierID AND Price < 20); 
+
+----------------------------------------------
+#Os operadores Any e All são utilizados em conjunto com às cláusulas where e having
+
+#O operador ANY retorna verdadeiro se qualquer um dos valores das subqueries satisfazer a condição
+
+	SELECT column_name(s)
+	FROM table_name
+	WHERE column_name operator ANY
+	(SELECT column_name FROM table_name WHERE condition); 
+
+#O operador ALL retorna verdadeiro se todos os valores das subqueries satisfazerem a condição
+
+	SELECT column_name(s)
+	FROM table_name
+	WHERE column_name operator ALL
+	(SELECT column_name FROM table_name WHERE condition); 
+
+exemplo
+
+	SELECT ProductName
+	FROM Products
+	WHERE ProductID = ANY (SELECT ProductID FROM OrderDetails WHERE Quantity = 10); 
+
+----------------------------------------------
+#Copiando os dados de uma tabela para uma nova tabela
+
+	SELECT *
+	INTO newtable [IN externaldb]
+	FROM oldtable
+	WHERE condition; 
+
+
+	SELECT column1, column2, column3, ...
+	INTO newtable [IN externaldb]
+	FROM oldtable
+	WHERE condition; 
+
+----------------------------------------------
+#Inserindo dados em uma tabela 
+
+#Inserindo todas colunas de uma tabela
+	INSERT INTO table2
+	SELECT * FROM table1
+	WHERE condition; 
+
+#Inserindo algumas colunas de uma tabela
+	INSERT INTO table2 (column1, column2, column3, ...)
+	SELECT column1, column2, column3, ...
+	FROM table1
+	WHERE condition; 
+
+#Inserindo uma nova linha na tabela
+	INSERT INTO table_name
+	(column_names)
+	VALUES
+	(_values_);
+
+----------------------------------------------
+#else if em sql com a condicional case
+
+	CASE
+	    WHEN condition1 THEN result1
+	    WHEN condition2 THEN result2
+	    WHEN conditionN THEN resultN
+	    ELSE result
+	END;
+
+----------------------------------------------
+#Modificando o valor null para terminal (como um alias pro null)
+
+	SELECT ProductName, UnitPrice * (UnitsInStock + IFNULL(UnitsOnOrder, 0))
+	FROM Products; 
+
+----------------------------------------------
+
+https://www.w3schools.com/sql/sql_stored_procedures.asp
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
+----------------------------------------------
