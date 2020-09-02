@@ -32,6 +32,9 @@
 
 ----------------------------------------------
 #Selecionando dados que passem numa determinada condição
+#Condições podem usar operadores >, <, >=, <=, =,<> (diferente), OR e AND 
+#Nao conseguimos buscar valores com ponto flutuante (ex float) com = ou <>
+#Precisamos utilizar BETWEEN VALOR - .1 AND VALOR + .1 
 
 	SELECT column1, column2, ...
 	FROM table_name
@@ -359,44 +362,139 @@ exemplo
 	FROM Products; 
 
 ----------------------------------------------
+#STORED PROCEDURE são procedimentos guardados para serem utilizados posteriormente
+#Se reescrevemos um código SQL várias e várias vezes podemos transformá-lo em stored procedure
 
-https://www.w3schools.com/sql/sql_stored_procedures.asp
+#Criando e armazenando o procedimento
+	CREATE PROCEDURE procedure_name
+	AS
+	sql_statement
+	GO;
+
+#Executando o procedimento
+	EXEC procedure_name;
+
+exemplo
+
+	CREATE PROCEDURE SelectAllCustomers
+	AS
+	SELECT * FROM Customers --esse é o comando armazenado na procedure
+	GO;
+
+	EXEC SelectAllCustomers;
+
 ----------------------------------------------
+#Criando database
+
+	CREATE DATABASE databasename;
+
 ----------------------------------------------
+#Deletando database
+
+	DROP DATABASE databasename;
+
 ----------------------------------------------
+#Fazendo backup do database
+
+	BACKUP DATABASE databasename
+	TO DISK = 'filepath';
+
 ----------------------------------------------
+#Criando uma tabela
+
+	CREATE TABLE table_name (
+	    column1 datatype,
+	    column2 datatype,
+	    column3 datatype,
+	   ....
+	);
+
 ----------------------------------------------
+#Deletando uma tabela
+
+	DROP TABLE table_name;
+
 ----------------------------------------------
+#Alterando a estrutura de uma tabela
+
+	ALTER TABLE table_name
+	ADD column_name datatype;
+
 ----------------------------------------------
+#Criando restrições na tabela
+#Constraints são utilizadas para dar ordens (rules) a certos dados
+
+	CREATE TABLE table_name (
+	    column1 datatype constraint,
+	    column2 datatype constraint,
+	    column3 datatype constraint,
+	    ....
+	);
+
+#Constrains comuns
+-- NOT NULL - Ensures that a column cannot have a NULL value
+-- UNIQUE - Ensures that all values in a column are different
+-- PRIMARY KEY - A combination of a NOT NULL and UNIQUE. Uniquely identifies each row in a table
+-- FOREIGN KEY - Uniquely identifies a row/record in another table
+-- CHECK - Ensures that all values in a column satisfies a specific condition
+-- DEFAULT - Sets a default value for a column when no value is specified
+-- INDEX - Used to create and retrieve data from the database very quickly
+
+	CREATE TABLE Orders (
+	    OrderID int NOT NULL PRIMARY KEY,
+	    OrderNumber int NOT NULL,
+	    PersonID int FOREIGN KEY REFERENCES Persons(PersonID)
+	);
+
+	CREATE TABLE Persons (
+	    ID int NOT NULL,
+	    LastName varchar(255) NOT NULL,
+	    FirstName varchar(255),
+	    Age int,
+	    CONSTRAINT PK_Person PRIMARY KEY (ID,LastName)
+	);
+
+	#ou... depois de criada a tabela
+	ALTER TABLE Persons
+	ADD PRIMARY KEY (ID);
 ----------------------------------------------
+#Autoincremento
+
+	CREATE TABLE Persons (
+	    Personid int NOT NULL AUTO_INCREMENT,
+	    LastName varchar(255) NOT NULL,
+	    FirstName varchar(255),
+	    Age int,
+	    PRIMARY KEY (Personid)
+	);
+
 ----------------------------------------------
+#Datas
+-- MySQL 
+-- DATE - format YYYY-MM-DD
+-- DATETIME - format: YYYY-MM-DD HH:MI:SS
+-- TIMESTAMP - format: YYYY-MM-DD HH:MI:SS
+-- YEAR - format YYYY or YY
+
+-- SQL 
+-- DATE - format YYYY-MM-DD
+-- DATETIME - format: YYYY-MM-DD HH:MI:SS
+-- SMALLDATETIME - format: YYYY-MM-DD HH:MI:SS
+-- TIMESTAMP - format: a unique number
+
+-- Note: The date types are chosen for a column when you create a new table in your database!
+
 ----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
-----------------------------------------------
+#Criando views
+#Views são como tabelas reais mas criadas a partir de comandos sql
+#Podemos utilizar comandos de busca, seleção e junção (join) para criar as views
+
+	CREATE VIEW view_name AS
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE condition;
+
+	CREATE VIEW [Brazil Customers] AS
+	SELECT CustomerName, ContactName
+	FROM Customers
+	WHERE Country = 'Brazil';
