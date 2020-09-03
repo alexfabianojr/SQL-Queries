@@ -3,32 +3,38 @@
 ----------------------------------------------
 #Syntax básicas
 
-    SELECT - seleciona para extrair um dado da tabela
-    UPDATE - atualiza os dados em uma linha da tabela
-    DELETE - deleta uma linha de dados da tabela
-    INSERT INTO - insere uma nova linha de dados na tabela
-    CREATE DATABASE - cria um novo database
-    ALTER DATABASE - modifica o database
-    CREATE TABLE - cria uma nova tabela
-    ALTER TABLE - modifica uma tabela
-    DROP TABLE - deleta uma tabela
-    CREATE INDEX - cria um index (search key)
-    DROP INDEX - deleta um index
+    -- SELECT - seleciona para extrair um dado da tabela
+    -- UPDATE - atualiza os dados em uma linha da tabela
+    -- DELETE - deleta uma linha de dados da tabela
+    -- INSERT INTO - insere uma nova linha de dados na tabela
+    -- CREATE DATABASE - cria um novo database
+    -- ALTER DATABASE - modifica o database
+    -- CREATE TABLE - cria uma nova tabela
+    -- ALTER TABLE - modifica uma tabela
+    -- DROP TABLE - deleta uma tabela
+    -- CREATE INDEX - cria um index (search key)
+    -- DROP INDEX - deleta um index
+
+----------------------------------------------
+#Descrevendo a tabela
+
+	DESC TABLE_NAME;
 
 ----------------------------------------------
 
 	SELECT column1, column2, ...
-	FROM table_name; 
+		FROM table_name; 
 
 ----------------------------------------------
 
-	SELECT * FROM table_name; 
+	SELECT * 
+		FROM table_name; 
 
 ----------------------------------------------
 #Selecionando apenas valores distintos, descartando as repetições
 
 	SELECT DISTINCT column1, column2, ...
-	FROM table_name; 
+		FROM table_name; 
 
 ----------------------------------------------
 #Selecionando dados que passem numa determinada condição
@@ -37,16 +43,18 @@
 #Precisamos utilizar BETWEEN VALOR - .1 AND VALOR + .1 
 
 	SELECT column1, column2, ...
-	FROM table_name
-	WHERE condition; 
+		FROM table_name
+		WHERE condition; 
 
 ----------------------------------------------
 #Agrupando condições
 
 #And - vínculo obrigatório &&
 	SELECT column1, column2, ...
-	FROM table_name
-	WHERE condition1 AND condition2 AND condition3 ...;
+		FROM table_name
+		WHERE condition1 
+			AND condition2 
+			AND condition3 ...;
 
 #Or - vínculo alternativo || ou else if()
 	SELECT column1, column2, ...

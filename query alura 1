@@ -35,22 +35,27 @@
 ----------------------------------------------
 #Ver todos os dados da tabela selecionada
 
-    SELECT * FROM tb_produtos;
+    SELECT * 
+    	FROM tb_produtos;
 
 ----------------------------------------------
 #Selecionando os campos de uma tabela
 
-    SELECT CPF, NOME, CIDADE FROM tbcliente;
+    SELECT CPF, NOME, CIDADE 
+    	FROM tbcliente;
 
 ----------------------------------------------
 #Selecionando so campos de uma tabela e dando alias a eles
 
-    SELECT CPF AS CPF_CLIENTE, CIDADE AS CIDADE_CLIENTE FROM tbcliente;
+    SELECT CPF AS CPF_CLIENTE, CIDADE AS CIDADE_CLIENTE 
+    	FROM tbcliente;
 
 ----------------------------------------------
 #Selecionando com filtros
 
-    SELECT CPF FROM tbcliente WHERE CPF = '222222222';
+    SELECT CPF 
+    	FROM tbcliente 
+    	WHERE CPF = '222222222';
 
 ----------------------------------------------
 #Inserir uma nova linha no db
@@ -65,20 +70,20 @@
 
     UPDATE tb_produtos 
         SET EMBALAGEM_PRODUTO = 'Lata', PRECO_LISTA = 2.46
-    WHERE COD_PRODUTO = '544931';
+    	WHERE COD_PRODUTO = '544931';
 
 ----------------------------------------------
 #Deletando uma linha
 
     DELETE FROM tb_produtos 
-    WHERE COD_PRODUTO = '1078680';
+    	WHERE COD_PRODUTO = '1078680';
 
 ----------------------------------------------
 #Tornando um campo da tabela em PK
 #melhor seria declarar já na criação da tabela
 
     ALTER TABLE tb_produtos 
-    ADD PRIMARY KEY (COD_PRODUTO);
+    	ADD PRIMARY KEY (COD_PRODUTO);
 
 ----------------------------------------------
 #Adicionando uma nova coluna a tabela
@@ -88,29 +93,161 @@
 ----------------------------------------------
 #Filtrando datas
 
-	SELECT * FROM tbcliente WHERE DATA_NASCIMENTO = '1995-01-13';
+	SELECT * 
+		FROM tbcliente 
+		WHERE DATA_NASCIMENTO = '1995-01-13';
 
-	SELECT * FROM tbcliente WHERE DATA_NASCIMENTO > '1995-01-13';
+	SELECT * 
+		FROM tbcliente 
+		WHERE DATA_NASCIMENTO > '1995-01-13';
 
-	SELECT * FROM tbcliente WHERE DATA_NASCIMENTO < '1995-01-13';
+	SELECT * 
+		FROM tbcliente 
+		WHERE DATA_NASCIMENTO < '1995-01-13';
 
-	SELECT * FROM tbcliente WHERE DATA_NASCIMENTO >= '1995-01-13';
+	SELECT * 
+		FROM tbcliente 
+		WHERE DATA_NASCIMENTO >= '1995-01-13';
 
-	SELECT * FROM tbcliente WHERE DATA_NASCIMENTO <> '1995-01-13';
+	SELECT * 
+		FROM tbcliente 
+		WHERE DATA_NASCIMENTO <> '1995-01-13';
 
-	SELECT * FROM tbcliente WHERE YEAR(DATA_NASCIMENTO) = 1995;
+	SELECT * 
+		FROM tbcliente 
+		WHERE YEAR(DATA_NASCIMENTO) = 1995;
 
-	SELECT * FROM tbcliente WHERE MONTH(DATA_NASCIMENTO) = 10;
+	SELECT * 
+		FROM tbcliente 
+		WHERE MONTH(DATA_NASCIMENTO) = 10;
 
 ----------------------------------------------
 #Filtros compostos
 
-	SELECT * FROM tbcliente WHERE (IDADE >= 18 AND IDADE <= 22 AND SEXO = 'M')
-		OR (CIDADE = 'Rio de Janeiro' OR BAIRRO = 'Jardins');
+	SELECT * 
+		FROM tbcliente 
+		WHERE (IDADE >= 18 AND IDADE <= 22 AND SEXO = 'M')
+			OR (CIDADE = 'Rio de Janeiro' OR BAIRRO = 'Jardins');
 
-	SELECT * FROM TABELA_DE_VENDEDORES WHERE YEAR(DATA_ADMISSAO) < 2016 AND DE_FERIAS = 1;
+	SELECT * 
+		FROM TABELA_DE_VENDEDORES 
+		WHERE YEAR(DATA_ADMISSAO) < 2016 
+			AND DE_FERIAS = 1;
 
+----------------------------------------------
+#Retornando valores distintos
 
+	SELECT DISTINCT EMBALAGEM, TAMANHO 
+		FROM tabela_de_produtos
+		WHERE SABOR = LARANJA;	
 
+----------------------------------------------
+#Limitando as buscas
 
+	SELECT * 
+		FROM [TBNAME] 
+		LIMIT 4;
+
+#Limitando do 2 ao 4
+	SELECT * 
+		FROM [TBNAME] 
+		LIMIT 2, 4;
+
+----------------------------------------------
+#Ordenacao
+
+	SELECT [CAMPOS] 
+		FROM [TABLENAME] 
+			ORDER BY CAMPO_X ASC;
+
+	SELECT [CAMPOS] 
+		FROM [TABLENAME] 
+		ORDER BY CAMPO_x, CAMPO_Y DESC;
+
+	SELECT [CAMPOS] 
+		FROM [TABLENAME] 
+		ORDER BY CAMPO_x ASC, CAMPO_Y DESC;
+
+	SELECT [CAMPO_NUMERICO], SUM(OUTROCAMPO_NUMERICO)
+		FROM TABLE_NAME 
+		GROUP BY CAMPO_NUMERICO;
+
+	SELECT ESTADO, SUM(LIMITE_CREDITO) AS LIMITE_TOTAL
+		FROM TABLE_CLIENTE 
+		GROUP BY ESTADO;
+
+	SELECT EMBALAGEM, COUNT(*) AS CONTADOR 
+		FROM tabela_de_produtos
+		GROUP BY EMBALAGEM; --contando a quantidade de cada tipo de embalagem
+
+	SELECT ESTADO, BAIRRO, SUM(LIMITE_CREDITO) AS LIMITE 
+		FROM TABLE_CLIENTE
+		WHERE CIDADE = 'Rio de Janeiro'
+		GROUP BY ESTADO, BAIRRO
+		ORDER BY BAIRRO;
+
+	SELECT MAX(`QUANTIDADE`) as 'MAIOR QUANTIDADE' 
+		FROM itens_notas_fiscais 
+		WHERE `CODIGO_DO_PRODUTO` = '1101035' ;
+
+	SELECT COUNT(*) 
+		FROM itens_notas_fiscais 
+		WHERE codigo_do_produto = '1101035' 
+		AND QUANTIDADE = 99;
+
+----------------------------------------------
+#Having é uma condição (filtro) que se aplica ao resultado de uma agregação
+
+	SELECT X, SUM(Y) 
+		FROM TABLE 
+		GROUP BY X
+		HAVING SUM(Y) >= 6
+#Quero só visualizar os campos cuja soma der maior que 6
+
+	SELECT ESTADO, SUM(LIMITE_CREDITO) AS SOMA_LIMITE 
+		FROM TABLE_CLIENTE
+		GROUP BY ESTADO
+		HAVING SUM(LIMITE_CREDITO) > 90000;
+
+	SELECT EMBALAGEM, 
+			MAX(PRECO_LISTA) AS MAIOR_PRECO, 
+			MIN(PRECO_LISTA) AS MENOR_PRECO 
+		FROM tabela_de_produtos
+		GROUP BY EMBALAGEM
+		HAVING SUM(PRECO_LISTA) <= 80
+			AND MAX(PRECO_LISTA) >= 5; 
+
+#Quais foram os clientes que fizeram mais de 2000 compras em 2016?
+	SELECT CPF, COUNT(*) 
+		FROM notas_fiscais
+  		WHERE YEAR(DATA_VENDA) = 2016
+  		GROUP BY CPF
+  		HAVING COUNT(*) > 2000
+
+ #CASE: fazemos um teste em um ou mais campos e dependendo do resultado teremos um ou outro valor
+
+ 	CASE 
+ 		WHEN <condição> THEN <valor1>
+ 		WHEN <condição> THEN valor2>
+ 		(...)
+ 		WHEN <condiçãoN> THEN <valorN>
+ 		ELSE valorElse
+ 	END;
+
+ 	SELECT X,
+ 		CASE
+ 			WHEN Y >= 8 AND Y <= 10 THEN 'OTIMO'
+ 			WHEN Y >= 7 AND Y < 8 THEN 'BOM'
+ 			WHEN Y >= 5 AND Y < 7 THEN 'MEDIO'
+ 			ELSE 'RUIM'
+ 		END
+ 		FROM TABELA_NOME;
+
+ 	SELECT NOME,
+		CASE 
+			WHEN YEAR(data_de_nascimento) < 1990 THEN 'Velho'
+			WHEN YEAR(data_de_nascimento) >= 1990 
+				AND YEAR(data_de_nascimento) <= 1995 THEN 'Jovens' 
+			ELSE 'Crianças' END
+		FROM tabela_de_clientes
 
